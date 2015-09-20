@@ -1,0 +1,16 @@
+# filesToIncludeInBuild.py
+# michael murphy 2015
+# 
+# given a package.xml file, remove all files not referenced
+# in the file
+
+from BeautifulSoup import BeautifulSoup
+
+typeSuffixMap = {}
+
+class RemoveFiles:
+    def _init_(self):
+        pass
+
+    def removeFiles(self, pathList):
+        pass
