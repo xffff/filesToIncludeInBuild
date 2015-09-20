@@ -1,16 +1,47 @@
+##################################
 # filesToIncludeInBuild.py
 # michael murphy 2015
-# 
-# given a package.xml file, remove all files not referenced
-# in the file
+##################################
+# delete all files that are not 
+# referenced in package.xml
+##################################
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
+import sys
 
-typeSuffixMap = {}
+global _debug = False
 
-class RemoveFiles:
-    def _init_(self):
-        pass
+def parseXml(xmlFile):
+    ''' parse the XML file '''
+    soup = BeautifulSoup(xmlFile, "xml.parser")
+    print(soup.prettify())
 
-    def removeFiles(self, pathList):
-        pass
+def usage():
+    ''' print usage info to command line '''
+    pass
+
+def filesToIncludeInBuild(argv):
+    ''' main function, get args and start doing stuff '''
+    
+    try:
+        opts, args = getopt.getopt(argv, "-hf:d", ["help", "package="])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ("h", "--help"):
+            usage()
+            sys.exit()
+        elif opt == "-d":
+            _debug = True
+        elif opt in ("-p", "--package"):
+            if(os.path.exists(arg)):
+                getFiles = GetFiles()
+        
+if __name__ == "__main__":
+    ''' should have one argument for the location
+        of the package.xml file for us to parse
+        if this is not present then assume in same dir '''
+    
+    filesToIncludeInBuild(sys.argv[1:])
