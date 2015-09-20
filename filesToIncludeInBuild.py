@@ -21,24 +21,26 @@ def parseXml(xmlfile):
     ''' parse the XML file '''
     
     root = etree.XML(removeNamespaceReturnRoot(xmlfile))
-    
-    # get all types
-    for child in root:
-        for subchild in child:
-            print(subchild.tag, subchild.text)
+    memberdict = {}
 
+    # create a dict of name->members
+    for i in root.iter("types"):
+        # get the name tag
+        name = i.find("name").text
+        
+        # get all members and add to dict
+        memberdict[name] = [x.text for x in i.findall("members")]
 
-    # look up the file extension
-    # look up the file path
+    # look up the file extension (potentially can be omitted)
+    # and the relative file path
     # for the current type name
 
-    # create array of members that should exist
-
-    # iterate through and create list of files
-    # that actually exist on the file system
-
-    # if members do not exist, delete
-    # the files that should not be there
+    # for each type get contents of
+    # folder as a list. if the list is
+    # bigger than the dictionary list
+    
+    # delete the ones that do not match
+    # a simple regex
 
 def removeNamespaceReturnRoot(xmlfile):
     ''' read to string and remove the xmlns 
