@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <types>
-    <folderinsrc>classes</folderinsrc>
+    <folder>classes</folder>
     <extension>cls</extension>
     <name>ApexClass</name>
   </types>

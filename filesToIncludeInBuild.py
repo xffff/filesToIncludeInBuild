@@ -14,14 +14,19 @@ def setup():
     global _debug
     _debug = False
 
-def parseXml(xmlfile):
+def parseXml(packagexml, configxml):
     ''' parse the XML file '''
     
-    if _debug:
-        print("parsing: {0}".format(xmlfile))
+    print("parsexml")
 
-    root = etree.XML(removeNamespaceReturnRoot(xmlfile))
+    if _debug:
+        print("parsing: {0}".format(packagexml))
+
     typememberdict = {}
+    typefileextdict = {}
+    typefilepathdict = {}
+    root = etree.XML(removeNamespaceReturnRoot(packagexml))
+    configroot = etree.XML(removeNamespaceReturnRoot(configxml))
 
     # create a dict of name->members
     for i in root.iter("types"):
@@ -31,20 +36,38 @@ def parseXml(xmlfile):
 
         if _debug:
             print("typememberdict[{0}] : {1}".format(name, members))
-              
-        # get all members and add to dict
-        typememberdict[name] = members
 
     # look up the file extension (potentially can be omitted)
     # and the relative file path for the current type name
-    # from the XML config file specified in the argument... 
-    pass # @TODO
+    # from the XML config file specified in the argument...
+    for i in configroot.iter("types"):
+        # get the tag for the file extension
+        try:
+            print("get name")
+            name = i.find("name").text
+            print("get ext")
+            extension = i.find("extension").text
+            print("get folder")
+            folder = i.find("folder").text
+        except Exception as e:
+            sys.exit("Error reading file: {0}".format(e.args))
 
-
+        typefilepathdict[name] = folder
+        typefileextdict[name] = extension
+        
     # for each type get contents of
     # folder as map
-    typefoldercontentsdict = getFolderContents()
+    typefoldercontentsdict = getFolderContents(typememberdict, \
+                                               typefilepathdict)
 
+    if _debug:
+        print("typefoldercontentsdict: {0}" \
+              .format([(k, v) for k, v in typefoldercontentsdict]))
+        print("typememberdict: {0}" \
+              .format([(k, v) for k, v in typememberdict]))
+        print("typefileextdict: {0}" \
+              .format([(k, v) for k, v in typefileextdict]))
+        
     # delete the ones that do not match
     removeFiles()
 
@@ -53,14 +76,23 @@ def getFolderContents(typememberdict, typefilepathdict):
         for each type, get the contents of the folder
         specified for this type by the typefilepathdict '''
     
+    typefoldercontentsdict = {}
+    
+    for k, v in typememberdict:
+        filepath = typefilepathdict[k]
+        print("filepath: {0}".format(filepath))
+        typefoldercontentsdict[k] = os.listdir(filepath)
 
-def removeNamespaceReturnRoot(xmlfile):
+    return typefoldercontentsdict
+    
+
+def removeNamespaceReturnRoot(packagexml):
     ''' read to string and remove the xmlns 
         because it just causes loads of issues '''
 
     xmldata = ""
 
-    with open(xmlfile, "r") as myfile:
+    with open(packagexml, "r") as myfile:
         xmldata = myfile.read()
 
     xmldata = re.sub('xmlns=".*"', '', xmldata, count=1)
@@ -75,7 +107,7 @@ def removeFiles():
         if it isnt then sort both value lists so they are ordered sets
         then iterate through and compare each value
         if a != b then delete b from the filesystem'''
-
+    
 
 def usage():
     ''' print usage info to command line '''
@@ -90,6 +122,8 @@ def filesToIncludeInBuild(argv):
         usage()
         sys.exit(2)
 
+    doParse = False
+
     for opt, arg in opts:
         print(opt, arg)
         
@@ -97,6 +131,7 @@ def filesToIncludeInBuild(argv):
             usage()
             sys.exit()
         elif opt == "-d":
+            print("debug true")
             _debug = True
         elif opt in ("-p", "--package"):
             if _debug:
@@ -104,12 +139,14 @@ def filesToIncludeInBuild(argv):
             if os.path.exists(arg):
                 if _debug:
                     print("file found: {0}".format(arg))
-                    
-                parseXml(arg)
+                doParse = True
             else:
                 print("file not found")
         else:
             print("package xml path not specified")
+
+    if doParse:
+        parseXml(arg, "config.xml")
 
 if __name__ == "__main__":
     ''' should have one argument for the location
