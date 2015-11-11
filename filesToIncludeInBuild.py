@@ -45,15 +45,15 @@ def parseXml(rootdir, packagexml, configxml):
         typefileextdict[name] = extension
         
     # for each type get contents of folder as map
-    typefoldercontentsdict = getFolderContents(typememberdict, \
-                                               typefilepathdict)
+    typefoldercontentsdict = getFolderContents(typememberdict \
+                                               , typefilepathdict)
 
     if _debug:
-        print("typefoldercontentsdict: {0}" \
+        print("typefoldercontentsdict: {0}"	\
               .format(typefoldercontentsdict.items()))
-        print("typememberdict: {0}" \
+        print("typememberdict: {0}"		\
               .format(typememberdict.items()))
-        print("typefileextdict: {0}" \
+        print("typefileextdict: {0}"		\
               .format(typefileextdict.items()))
     
     # delete the ones that do not match
@@ -74,6 +74,9 @@ def getFolderContents(typememberdict, typefilepathdict):
         
             typefoldercontentsdict[k] = os.listdir(filepath)
         except KeyError as e:
+            ''' we could save these and use them later
+                probably for something else like knowing
+                that they can be deleted... hooray '''
             print("Failed to get key: {0}".format(e.args))
 
     return typefoldercontentsdict
@@ -94,12 +97,12 @@ def removeNamespaceReturnRoot(packagexml):
     return xmldata
 
 
-def removeFiles():
+def removeFiles(typefoldercontentsdict, typememberdict, typefilepadict):
     ''' remove files from filesystem 
         first check for each key whether the value list is the same size
         if it isnt then sort both value lists so they are ordered sets
         then iterate through and compare each value
-        if a != b then delete b from the filesystem'''
+        if a != b then delete b from the filesystem '''
     
 
 def usage():
