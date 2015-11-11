@@ -9,16 +9,10 @@
 from lxml import etree
 import sys, os, getopt, re
 
-def setup():
-    ''' method to set up all global vars used '''
-    global _debug
-    _debug = False
-
 def parseXml(packagexml, configxml):
     ''' parse the XML file '''
+    global _debug
     
-    print("parsexml")
-
     if _debug:
         print("parsing: {0}".format(packagexml))
 
@@ -33,9 +27,7 @@ def parseXml(packagexml, configxml):
         # get the name tag
         name = i.find("name").text
         members = [x.text for x in i.findall("members")]
-
-        if _debug:
-            print("typememberdict[{0}] : {1}".format(name, members))
+        typememberdict[name] = members
 
     # look up the file extension (potentially can be omitted)
     # and the relative file path for the current type name
@@ -43,11 +35,8 @@ def parseXml(packagexml, configxml):
     for i in configroot.iter("types"):
         # get the tag for the file extension
         try:
-            print("get name")
             name = i.find("name").text
-            print("get ext")
             extension = i.find("extension").text
-            print("get folder")
             folder = i.find("folder").text
         except Exception as e:
             sys.exit("Error reading file: {0}".format(e.args))
@@ -62,12 +51,12 @@ def parseXml(packagexml, configxml):
 
     if _debug:
         print("typefoldercontentsdict: {0}" \
-              .format([(k, v) for k, v in typefoldercontentsdict]))
+              .format(typefoldercontentsdict.items()))
         print("typememberdict: {0}" \
-              .format([(k, v) for k, v in typememberdict]))
+              .format(typememberdict.items()))
         print("typefileextdict: {0}" \
-              .format([(k, v) for k, v in typefileextdict]))
-        
+              .format(typefileextdict.items()))
+    
     # delete the ones that do not match
     removeFiles()
 
@@ -78,10 +67,14 @@ def getFolderContents(typememberdict, typefilepathdict):
     
     typefoldercontentsdict = {}
     
-    for k, v in typememberdict:
-        filepath = typefilepathdict[k]
-        print("filepath: {0}".format(filepath))
-        typefoldercontentsdict[k] = os.listdir(filepath)
+    for k, v in typememberdict.items():
+        try:
+            filepath = typefilepathdict[k]
+            if _debug:
+                print("filepath: {0}".format(filepath))
+            typefoldercontentsdict[k] = os.listdir(filepath)
+        except KeyError as e:
+            print("Failed to get key: {0}".format(e.args))
 
     return typefoldercontentsdict
     
@@ -115,6 +108,8 @@ def usage():
 
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
+    global _debug
+    _debug = False
 
     try:
         opts, args = getopt.getopt(argv, "-hp:d", ["help", "package="])
@@ -152,8 +147,6 @@ if __name__ == "__main__":
     ''' should have one argument for the location
         of the package.xml file for us to parse
         if this is not present then assume in same dir '''
-
-    setup()
 
     if len(sys.argv) > 1:
         filesToIncludeInBuild(sys.argv[1:])
