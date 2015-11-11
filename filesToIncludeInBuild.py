@@ -9,7 +9,7 @@
 from lxml import etree
 import sys, os, getopt, re
 
-def parseXml(packagexml, configxml):
+def parseXml(rootdir, packagexml, configxml):
     ''' parse the XML file '''
     global _debug
     
@@ -41,11 +41,10 @@ def parseXml(packagexml, configxml):
         except Exception as e:
             sys.exit("Error reading file: {0}".format(e.args))
 
-        typefilepathdict[name] = folder
+        typefilepathdict[name] = os.path.join(rootdir, folder)
         typefileextdict[name] = extension
         
-    # for each type get contents of
-    # folder as map
+    # for each type get contents of folder as map
     typefoldercontentsdict = getFolderContents(typememberdict, \
                                                typefilepathdict)
 
@@ -72,6 +71,7 @@ def getFolderContents(typememberdict, typefilepathdict):
             filepath = typefilepathdict[k]
             if _debug:
                 print("filepath: {0}".format(filepath))
+        
             typefoldercontentsdict[k] = os.listdir(filepath)
         except KeyError as e:
             print("Failed to get key: {0}".format(e.args))
@@ -110,14 +110,18 @@ def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
     global _debug
     _debug = False
-
+    packagexml = configxml = rootdir = None
+    
     try:
-        opts, args = getopt.getopt(argv, "-hp:d", ["help", "package="])
+        opts, args = getopt.getopt(argv \
+                                   , "-hpcr:d" \
+                                   , ["help" \
+                                      , "package=" \
+                                      , "config=" \
+                                      , "root="])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
-
-    doParse = False
 
     for opt, arg in opts:
         print(opt, arg)
@@ -128,20 +132,28 @@ def filesToIncludeInBuild(argv):
         elif opt == "-d":
             print("debug true")
             _debug = True
-        elif opt in ("-p", "--package"):
-            if _debug:
-                print("package arg found")
-            if os.path.exists(arg):
-                if _debug:
-                    print("file found: {0}".format(arg))
-                doParse = True
-            else:
-                print("file not found")
-        else:
-            print("package xml path not specified")
 
-    if doParse:
-        parseXml(arg, "config.xml")
+        elif opt in ("-c","--config"):
+            if os.path.exists(arg):
+                configxml = arg
+            else:
+                sys.exit("config xml file not found: {0}".format(arg))
+        elif opt in ("-p", "--package"):
+            if os.path.exists(arg):
+                packagexml = arg
+            else:
+                print("package xml file not found: {0}".format(arg))
+        elif opt in ("-r","--root"):
+            if os.path.exists(arg):
+                rootdir = arg
+            else:
+                sys.exit("the root directory specified doesnt exist")
+        else:
+            print("args missing")
+            usage()
+
+    if rootdir != None and packagexml != None and configxml != None:
+        parseXml(rootdir, packagexml, configxml)
 
 if __name__ == "__main__":
     ''' should have one argument for the location
