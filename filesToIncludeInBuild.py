@@ -7,7 +7,7 @@
 ##################################
 
 from lxml import etree
-import sys, os, getopt, re
+import sys, os, re, argparse
 
 def parseXml(rootdir, packagexml, configxml):
     ''' parse the XML file '''
@@ -113,15 +113,15 @@ def filesToIncludeInBuild(argv):
     packagexml = configxml = rootdir = None
     
     try:
-        opts, args = getopt.getopt(argv \
-                                   , "-hpcr:d" \
-                                   , ["help" \
-                                      , "package=" \
-                                      , "config=" \
-                                      , "root="])
+        opts, args = getopt.gnu_getopt(argv \
+                                       , "-hpcr:d" \
+                                       , ["help" \
+                                          , "package=" \
+                                          , "config=" \
+                                          , "root="])
     except getopt.GetoptError:
         usage()
-        sys.exit(2)
+        sys.exit("get opt error")
 
     for opt, arg in opts:
         print(opt, arg)
@@ -132,22 +132,24 @@ def filesToIncludeInBuild(argv):
         elif opt == "-d":
             print("debug true")
             _debug = True
-
         elif opt in ("-c","--config"):
             if os.path.exists(arg):
                 configxml = arg
             else:
                 sys.exit("config xml file not found: {0}".format(arg))
+                usage()
         elif opt in ("-p", "--package"):
             if os.path.exists(arg):
                 packagexml = arg
             else:
-                print("package xml file not found: {0}".format(arg))
+                sys.exit("package xml file not found: {0}".format(arg))
+                usage()
         elif opt in ("-r","--root"):
             if os.path.exists(arg):
                 rootdir = arg
             else:
-                sys.exit("the root directory specified doesnt exist")
+                sys.exit("the root directory specified doesnt exist".format(arg))
+                usage()
         else:
             print("args missing")
             usage()
