@@ -112,57 +112,41 @@ def filesToIncludeInBuild(argv):
     _debug = False
     packagexml = configxml = rootdir = None
     
-    try:
-        opts, args = getopt.gnu_getopt(argv \
-                                       , "-hpcr:d" \
-                                       , ["help" \
-                                          , "package=" \
-                                          , "config=" \
-                                          , "root="])
-    except getopt.GetoptError:
-        usage()
-        sys.exit("get opt error")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p"                                              
+                        , "--package"                                     
+                        , type=str                                        
+                        , help="the package xml file")
+    parser.add_argument("-c"                                              
+                        , "--config"                                      
+                        , type=str                                        
+                        , help="the config xml file")
+    parser.add_argument("-r"                                              
+                        , "--root"                                        
+                        , type=str                                        
+                        , help="the root directory")
+    parser.add_argument("-d"                                              
+                        , "--debug"
+                        , dest="_debug"
+                        , action="store_true"                             
+                        , help="turn on debug mode, this is very verbose" 
+                        , default=False)
+    args = parser.parse_args()
 
-    for opt, arg in opts:
-        print(opt, arg)
-        
-        if opt in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif opt == "-d":
-            print("debug true")
-            _debug = True
-        elif opt in ("-c","--config"):
-            if os.path.exists(arg):
-                configxml = arg
-            else:
-                sys.exit("config xml file not found: {0}".format(arg))
-                usage()
-        elif opt in ("-p", "--package"):
-            if os.path.exists(arg):
-                packagexml = arg
-            else:
-                sys.exit("package xml file not found: {0}".format(arg))
-                usage()
-        elif opt in ("-r","--root"):
-            if os.path.exists(arg):
-                rootdir = arg
-            else:
-                sys.exit("the root directory specified doesnt exist".format(arg))
-                usage()
-        else:
-            print("args missing")
-            usage()
+    if args.package == None or args.config == None or args.root == None:
+        sys.exit("you forgot package, config, or root directory parameters")
+    
+    if not os.path.exists(args.package):
+        sys.exit("the package file doesnt exist")
+    if not os.path.exists(args.config):
+        sys.exit("the config file doesnt exist")
+    if not os.path.exists(args.root):
+        sys.exit("the root folder doesnt exist")
 
-    if rootdir != None and packagexml != None and configxml != None:
-        parseXml(rootdir, packagexml, configxml)
 
 if __name__ == "__main__":
     ''' should have one argument for the location
         of the package.xml file for us to parse
         if this is not present then assume in same dir '''
 
-    if len(sys.argv) > 1:
-        filesToIncludeInBuild(sys.argv[1:])
-    else:
-        usage()
+    filesToIncludeInBuild(sys.argv[1:])
