@@ -143,7 +143,9 @@ def filesToIncludeInBuild(argv):
     if not os.path.exists(args.root):
         sys.exit("the root folder doesnt exist")
 
+    parseXml(args.root, args.package, args.config)
 
+        
 if __name__ == "__main__":
     ''' should have one argument for the location
         of the package.xml file for us to parse
