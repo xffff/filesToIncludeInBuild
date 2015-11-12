@@ -16,9 +16,7 @@ def parseXml(rootdir, packagexml, configxml):
     if _debug:
         print("parsing: {0}".format(packagexml))
 
-    typememberdict = {}
-    typefileextdict = {}
-    typefilepathdict = {}
+    typememberdict = typefileextdict = typefilepathdict = {}
     root = etree.XML(removeNamespaceReturnRoot(packagexml))
     configroot = etree.XML(removeNamespaceReturnRoot(configxml))
 
@@ -97,13 +95,32 @@ def removeNamespaceReturnRoot(packagexml):
     return xmldata
 
 
-def removeFiles(typefoldercontentsdict, typememberdict, typefilepadict):
+def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict):
     ''' remove files from filesystem 
         first check for each key whether the value list is the same size
         if it isnt then sort both value lists so they are ordered sets
         then iterate through and compare each value
         if a != b then delete b from the filesystem '''
-    
+
+    for k, v in typefoldercontentsdict.items():
+        if k not in typememberdict.keys():
+            # delete all files in the directory
+            pass 
+        else:
+            # if the members contain the element * 
+            # then we want to keep everything dont we
+            if "*" not in typememberdict[k]:
+                # otherwise sort the lists
+                typefolderlist = v.sort()
+                typememberlist = typememberdict[k].sort()
+
+                # if a file is not in the package xml but
+                # is in the filesystem, it should be deleted
+                # so it does not appear in the build
+                for i in typefolderlist:
+                    if i not in typememberdict:
+                        print("im going to delete: {0} " \
+                              .format(typefilepathdict[i]))
 
 def usage():
     ''' print usage info to command line '''
