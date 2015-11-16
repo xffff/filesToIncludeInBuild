@@ -9,6 +9,8 @@
 from lxml import etree
 import sys, os, re, argparse
 
+_debug = False
+
 def parseXml(rootdir, packagexml, configxml):
     ''' parse the XML file '''
     global _debug
@@ -16,12 +18,14 @@ def parseXml(rootdir, packagexml, configxml):
     if _debug:
         print("parsing: {0}".format(packagexml))
 
-    typememberdict = typefileextdict = typefilepathdict = {}
-    root = etree.XML(removeNamespaceReturnRoot(packagexml))
+    typememberdict = {}
+    typefileextdict = {}
+    typefilepathdict = {}
+    packageroot = etree.XML(removeNamespaceReturnRoot(packagexml))
     configroot = etree.XML(removeNamespaceReturnRoot(configxml))
 
     # create a dict of name->members
-    for i in root.iter("types"):
+    for i in packageroot.iter("types"):
         # get the name tag
         name = i.find("name").text
         members = [x.text for x in i.findall("members")]
@@ -36,16 +40,21 @@ def parseXml(rootdir, packagexml, configxml):
             name = i.find("name").text
             extension = i.find("extension").text
             folder = i.find("folder").text
+            
+            typefilepathdict[name] = os.path.join(rootdir, folder)
+            typefileextdict[name] = extension
+
+            if _debug:
+                print("Join paths: {0} + {1} = {2}".format(rootdir, folder, os.path.join(rootdir, folder)))
+                print("File extension for {0} is {1}".format(name, extension))
         except Exception as e:
             sys.exit("Error reading file: {0}".format(e.args))
-
-        typefilepathdict[name] = os.path.join(rootdir, folder)
-        typefileextdict[name] = extension
-        
-    # for each type get contents of folder as map
-    typefoldercontentsdict = getFolderContents(typememberdict \
+    
+    #for each type get contents of folder as map
+    typefoldercontentsdict = getFolderContents(typememberdict
                                                , typefilepathdict)
 
+        
     if _debug:
         print("typefoldercontentsdict: {0}"	\
               .format(typefoldercontentsdict.items()))
@@ -53,9 +62,9 @@ def parseXml(rootdir, packagexml, configxml):
               .format(typememberdict.items()))
         print("typefileextdict: {0}"		\
               .format(typefileextdict.items()))
-    
+
     # delete the ones that do not match
-    removeFiles()
+    removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict)
 
 def getFolderContents(typememberdict, typefilepathdict):
     ''' using the typememberdict keyset as a hook
@@ -67,10 +76,10 @@ def getFolderContents(typememberdict, typefilepathdict):
     for k, v in typememberdict.items():
         try:
             filepath = typefilepathdict[k]
-            if _debug:
-                print("filepath: {0}".format(filepath))
-        
-            typefoldercontentsdict[k] = os.listdir(filepath)
+            if "*" not in filepath:
+                if _debug:
+                    print("filepath: {0}".format(filepath))
+                    typefoldercontentsdict[k] = os.listdir(filepath)
         except KeyError as e:
             ''' we could save these and use them later
                 probably for something else like knowing
@@ -114,13 +123,17 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict):
                 typefolderlist = v.sort()
                 typememberlist = typememberdict[k].sort()
 
+                print("typefolderlist: {0}, typememberlist: {1}" \
+                      .format(typefolderlist, typememberlist))
+
                 # if a file is not in the package xml but
                 # is in the filesystem, it should be deleted
                 # so it does not appear in the build
-                for i in typefolderlist:
-                    if i not in typememberdict:
-                        print("im going to delete: {0} " \
-                              .format(typefilepathdict[i]))
+                if typefolderlist != None:
+                    for i in typefolderlist:
+                        if i not in typememberdict:
+                            print("im going to delete: {0} " \
+                                  .format(typefilepathdict[i]))
 
 def usage():
     ''' print usage info to command line '''
@@ -129,8 +142,10 @@ def usage():
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
     global _debug
-    _debug = False
-    packagexml = configxml = rootdir = None
+
+    packagexml = None
+    configxml = None
+    rootdir = None
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-p"                                              
@@ -150,9 +165,12 @@ def filesToIncludeInBuild(argv):
                         , dest="_debug"
                         , action="store_true"                             
                         , help="turn on debug mode, this is very verbose" 
-                        , default=False)
+                        , default=True)
     args = parser.parse_args()
 
+
+    _debug = True
+    
     if args.package == None or args.config == None or args.root == None:
         sys.exit("you forgot package, config, or root directory parameters")
     
