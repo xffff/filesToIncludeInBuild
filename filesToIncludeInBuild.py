@@ -16,15 +16,18 @@ def parseXml(rootdir, packagexml, configxml):
     if _debug:
         print("parsing: {0}".format(packagexml))
 
-    typememberdict = typefileextdict = typefilepathdict = {}
+    typememberdict = {}
+    typefileextdict = {}
+    typefilepathdict = {}
     root = etree.XML(removeNamespaceReturnRoot(packagexml))
     configroot = etree.XML(removeNamespaceReturnRoot(configxml))
-
+    
     # create a dict of name->members
     for i in root.iter("types"):
         # get the name tag
         name = i.find("name").text
         members = [x.text for x in i.findall("members")]
+        print("typememberdict[{0}] = {1}".format(name, members))
         typememberdict[name] = members
 
     # look up the file extension (potentially can be omitted)
@@ -47,6 +50,8 @@ def parseXml(rootdir, packagexml, configxml):
                                                , typefilepathdict)
 
     if _debug:
+        print("typefilepathdict: {0}" \
+              .format(typefilepathdict.items()))
         print("typefoldercontentsdict: {0}"	\
               .format(typefoldercontentsdict.items()))
         print("typememberdict: {0}"		\
@@ -55,7 +60,7 @@ def parseXml(rootdir, packagexml, configxml):
               .format(typefileextdict.items()))
     
     # delete the ones that do not match
-    removeFiles()
+    removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefileextdict)
 
 def getFolderContents(typememberdict, typefilepathdict):
     ''' using the typememberdict keyset as a hook
@@ -95,7 +100,7 @@ def removeNamespaceReturnRoot(packagexml):
     return xmldata
 
 
-def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict):
+def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefileextdict):
     ''' remove files from filesystem 
         first check for each key whether the value list is the same size
         if it isnt then sort both value lists so they are ordered sets
@@ -103,7 +108,13 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict):
         if a != b then delete b from the filesystem '''
 
     for k, v in typefoldercontentsdict.items():
+        if _debug:
+            print("key: {0}, value: {1}".format(k, v))
+
         if k not in typememberdict.keys():
+            if _debug:
+                print("key: {0} not in {1}".format(k, typememberdict.keys()))
+
             # delete all files in the directory
             pass 
         else:
@@ -111,16 +122,26 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict):
             # then we want to keep everything dont we
             if "*" not in typememberdict[k]:
                 # otherwise sort the lists
-                typefolderlist = v.sort()
-                typememberlist = typememberdict[k].sort()
+                typefolderlist = v                
+                typememberlist = [i+'.'+typefileextdict[k] for i in typememberdict[k]]
+                
+                typefolderlist.sort()
+                typememberlist.sort()
+
+                if _debug:
+                    print("typefolderlist: {0}\ntypememberlist: {1}".format(typefolderlist
+                                                                            , typememberlist))
 
                 # if a file is not in the package xml but
                 # is in the filesystem, it should be deleted
                 # so it does not appear in the build
                 for i in typefolderlist:
-                    if i not in typememberdict:
-                        print("im going to delete: {0} " \
-                              .format(typefilepathdict[i]))
+                    if i not in typememberlist:
+                        try:
+                            print("deleting: {0}/{1}".format(typefilepathdict[k], i))
+                        except Exception as e:
+                            sys.exit("typefilepathdict exception: {0}".format(e.args))
+                            
 
 def usage():
     ''' print usage info to command line '''
@@ -129,8 +150,10 @@ def usage():
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
     global _debug
-    _debug = False
-    packagexml = configxml = rootdir = None
+    _debug = True
+    packagexml = None
+    configxml = None
+    rootdir = None
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-p"                                              
