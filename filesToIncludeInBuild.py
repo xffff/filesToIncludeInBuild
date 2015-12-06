@@ -51,8 +51,10 @@ def parseXml(rootdir, packagexml, configxml):
             typefileextdict[name] = extension
 
             if _debug:
-                print("Join paths: {0} + {1} = {2}".format(rootdir, folder, os.path.join(rootdir, folder)))
-                print("File extension for {0} is {1}".format(name, extension))
+                print("Join paths: {0} + {1} = {2}"   \
+                      .format(rootdir, folder, os.path.join(rootdir, folder)))
+                print("File extension for {0} is {1}" \
+                      .format(name, extension))
         except Exception as e:
             sys.exit("Error reading file: {0}".format(e.args))
     
@@ -62,13 +64,13 @@ def parseXml(rootdir, packagexml, configxml):
 
         
     if _debug:
-        print("typefilepathdict: {0}" \
+        print("typefilepathdict: {0}"       \
               .format(typefilepathdict.items()))
-        print("typefoldercontentsdict: {0}"	\
+        print("typefoldercontentsdict: {0}" \
               .format(typefoldercontentsdict.items()))
-        print("typememberdict: {0}"		\
+        print("typememberdict: {0}"	    \
               .format(typememberdict.items()))
-        print("typefileextdict: {0}"		\
+        print("typefileextdict: {0}"	    \
               .format(typefileextdict.items()))
 
     # delete the ones that do not match
@@ -135,14 +137,19 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
             if "*" not in typememberdict[k]:
                 # otherwise sort the lists
                 typefolderlist = v                
-                typememberlist = [i+'.'+typefileextdict[k] for i in typememberdict[k]]
+                typememberlist = [i + "." + typefileextdict[k] for i in typememberdict[k]]
+                typemetalist = [i + "-meta.xml" for i in typememberlist]
                 
                 typefolderlist.sort()
                 typememberlist.sort()
 
                 if _debug:
-                    print("typefolderlist: {0}\ntypememberlist: {1}".format(typefolderlist
-                                                                            , typememberlist))
+                    print('''typefolderlist: {0}
+                    	     \ntypememberlist: {1}
+                    	     \ntypemetalist: {2}''' \
+                          .format(typefolderlist
+                                  , typememberlist
+                                  , typemetalist))
 
                 print("typefolderlist: {0}, typememberlist: {1}" \
                       .format(typefolderlist, typememberlist))
@@ -151,7 +158,7 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
                 # is in the filesystem, it should be deleted
                 # so it does not appear in the build
                 for i in typefolderlist:
-                    if i not in typememberlist:
+                    if i not in typememberlist and i not in typemetalist:
                         try:
                             print("deleting: {0}/{1}".format(typefilepathdict[k], i))
                         except Exception as e:
