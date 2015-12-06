@@ -84,7 +84,7 @@ def getFolderContents(typememberdict, typefilepathdict):
             ''' we could save these and use them later
                 probably for something else like knowing
                 that they can be deleted... hooray '''
-            print("Failed to get key: {0}".format(e.args))
+            print("No key: {0} for type member dict".format(e.args))
 
     return typefoldercontentsdict
     
