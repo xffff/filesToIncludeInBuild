@@ -161,6 +161,9 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
                     if i not in typememberlist and i not in typemetalist:
                         try:
                             print("deleting: {0}/{1}".format(typefilepathdict[k], i))
+
+                            # actually do the delete
+                            os.remove(typefilepathdict[k], i)
                         except Exception as e:
                             sys.exit("typefilepathdict exception: {0}".format(e.args))
                             
