@@ -236,7 +236,7 @@ def filesToIncludeInBuild(argv):
     if not os.path.exists(args.root):
         sys.exit("the src folder doesnt exist")
 
-    ftib = FilesToIncludeInBuild(args._debug, args._default)
+    ftib = FilesToIncludeInBuild(args._debug, args._delete)
 
     ftib.parseXml(os.path.realpath(args.root)
                   , os.path.realpath(args.package)
