@@ -184,7 +184,6 @@ class FilesToIncludeInBuild():
 
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
-    _debug, _delete = False
     packagexml = None
     configxml = None
     rootdir = None
@@ -213,7 +212,7 @@ def filesToIncludeInBuild(argv):
                         , dest="_delete"
                         , action="store_true"                             
                         , help="turn on delete mode, this will delete files" 
-                        , default=True)
+                        , default=False)
     args = parser.parse_args()
     
     if args.package == None or args.config == None or args.root == None:
@@ -226,7 +225,7 @@ def filesToIncludeInBuild(argv):
     if not os.path.exists(args.root):
         sys.exit("the src folder doesnt exist")
 
-    ftib = FilesToIncludeInBuild(_debug ,_default)
+    ftib = FilesToIncludeInBuild(args._debug, args._default)
 
     ftib.parseXml(os.path.realpath(args.root)
                   , os.path.realpath(args.package)
