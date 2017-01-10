@@ -149,6 +149,7 @@ class FilesToIncludeInBuild():
                 if self._delete:
                     try:
                         if os.path.exists(typefilepathdict[k]):
+                            print("Deleting: {0}".format(typefilepathdict[k]))
                             shutil.rmtree(typefilepathdict[k])
                     except Exception  as e:
                         print("Could not delete {0} the exception was: {1}".format(typefilepathdict[k], e.args))
