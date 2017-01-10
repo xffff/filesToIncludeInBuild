@@ -36,19 +36,9 @@
     <name>ApexTrigger</name>
   </types>
   <types>
-    <folder></folder>
-    <extension></extension>
-    <name>AuraDefinitionBundle</name>
-  </types>
-  <types>
     <folder>applications</folder>
     <extension>app</extension>
     <name>ConnectedApp</name>
-  </types>
-  <types>
-    <folder></folder>
-    <extension></extension>
-    <name>CustomApplication</name>
   </types>
   <types>
     <folder>labels</folder>
