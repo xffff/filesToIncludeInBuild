@@ -70,8 +70,7 @@ class FilesToIncludeInBuild():
                 sys.exit("Error reading file: {0}".format(e.args))
     
         #for each type get contents of folder as map
-        typefoldercontentsdict = getFolderContents(typememberdict
-                                                   , typefilepathdict)
+        typefoldercontentsdict = self.getFolderContents(typememberdict, typefilepathdict)
 
 
         if self._debug:
@@ -150,6 +149,8 @@ class FilesToIncludeInBuild():
                             shutil.rmtree(typefilepathdict[k])
                     except Exception  as e:
                         print("Could not delete {0} the exception was: {1}".format(typefilepathdict[k], e.args))
+                else:
+                    print("Execute not enabled, folder not deleted: {0}".format(typefilepathdict[k]))
             else:
                 # if the members contain the element * 
                 # then we want to keep everything dont we
@@ -179,11 +180,12 @@ class FilesToIncludeInBuild():
                     for i in typefolderlist:
                         if i not in typememberlist and i not in typemetalist:
                             try:
-                                print("deleting: {0}/{1}".format(typefilepathdict[k], i))
-
                                 # actually do the delete
                                 if self._delete:
+                                    print("deleting: {0}/{1}".format(typefilepathdict[k], i))
                                     os.remove("{0}/{1}".format(typefilepathdict[k], i))
+                                else:
+                                    print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
                                 sys.exit("typefilepathdict exception: {0}".format(e.args))
                             
