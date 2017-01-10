@@ -87,7 +87,7 @@ class FilesToIncludeInBuild():
         self.removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefileextdict)
 
         # move the package xml file
-        if _delete:
+        if self._delete:
             self.movePackageXml(rootdir, packagexml)
         else:
             print("Execute disabled: package.xml has not been moved")
