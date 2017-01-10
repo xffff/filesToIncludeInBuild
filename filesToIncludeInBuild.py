@@ -84,6 +84,9 @@ class FilesToIncludeInBuild():
         # delete the ones that do not match
         removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefileextdict)
 
+        # move the package xml file
+        movePackageXml(rootdir, packagexml)
+
     def getFolderContents(self, typememberdict, typefilepathdict):
         ''' using the typememberdict keyset as a hook
             for each type, get the contents of the folder
@@ -181,6 +184,14 @@ class FilesToIncludeInBuild():
                             except Exception as e:
                                 sys.exit("typefilepathdict exception: {0}".format(e.args))
                             
+
+    def movePackageXml(self, rootdir, packagexml):
+        ''' move the package xml file we used to the src directory
+            so that it can be built with the build '''
+        try:
+            shutil.move(packagexml, "{0}/package.xml".format(rootdir))
+        except Exception as e:
+            print("There was a problem replacing the original package.xml file: {0}".format(e.args))
 
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
