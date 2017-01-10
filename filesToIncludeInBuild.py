@@ -10,6 +10,7 @@ from lxml import etree
 import sys, os, re, argparse, shutil
 
 _debug = False
+_delete = False
 
 def parseXml(rootdir, packagexml, configxml):
     ''' parse the XML file '''
@@ -80,6 +81,7 @@ def getFolderContents(typememberdict, typefilepathdict):
     ''' using the typememberdict keyset as a hook
         for each type, get the contents of the folder
         specified for this type by the typefilepathdict '''
+    global _debug
     
     typefoldercontentsdict = {}
     
@@ -120,6 +122,8 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
         if it isnt then sort both value lists so they are ordered sets
         then iterate through and compare each value
         if a != b then delete b from the filesystem '''
+    global _debug
+    global _delete
 
     for k, v in typefilepathdict.items():
         if _debug:
@@ -132,7 +136,8 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
             # delete all files in the directory
             if _delete:
                 try:
-                    shutil.rmtree(typefilepathdict[k])
+                    if os.path.exists(typefilepathdict[k]):
+                        shutil.rmtree(typefilepathdict[k])
                 except Exception  as e:
                     print("Could not delete {0} the exception was: {1}".format(typefilepathdict[k], e.args))
         else:
@@ -179,9 +184,9 @@ def usage():
 
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
-    global _debug, _delete
-    _debug = True
-    _delete = False
+    global _debug
+    global _delete
+
     packagexml = None
     configxml = None
     rootdir = None

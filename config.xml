@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
   <types>
+    <folder>appmenus</folder>
+    <extension>appMenu</extension>
+    <name>AppMenu</name>
+  </types>
+  <types>
     <folder>classes</folder>
     <extension>cls</extension>
     <name>ApexClass</name>
   </types>
+  <types>
+    <folder>approvalProcesses</folder>
+    <extension>approvalProcess</extension>
+    <name>ApprovalProcess</name>
+  </types>  
+  <types>
+    <folder>assignmentRules</folder>
+    <extension>assignmentRule</extension>
+    <name>AssignmentRule</name>
+  </types>  
+  <types>
+    <folder>autoResponseRules</folder>
+    <extension>autoResponseRule</extension>
+    <name>AutoResponseRules</name>
+  </types>  
+  <types>
+    <folder>communities</folder>
+    <extension>community</extension>
+    <name>Community</name>
+  </types>  
   <types>
     <folder>dashboards</folder>
     <extension>dashboard</extension>
@@ -14,6 +39,11 @@
     <folder>email</folder>
     <extension>email</extension>
     <name>EmailTemplate</name>
+  </types>
+  <types>
+    <folder>escalationRules</folder>
+    <extension>escalationRules</extension>
+    <name>EscalationRule</name>
   </types>
   <types>
     <folder>reports</folder>
@@ -99,6 +129,11 @@
     <folder>reportTypes</folder>
     <extension>reportType</extension>
     <name>ReportType</name>
+  </types>
+  <types>
+    <folder>roles</folder>
+    <extension>role</extension>
+    <name>Role</name>
   </types>
   <types>
     <folder>settings</folder>
