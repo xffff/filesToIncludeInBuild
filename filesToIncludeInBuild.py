@@ -15,16 +15,19 @@ from lxml import etree
 import sys, os, re, argparse, shutil
 
 class FilesToIncludeInBuild():
+    _debug = False
+    _delete = False
 
     def __init__(self, _debug, _delete):
-        pass
+        self._debug = _debug
+        self._delete = _delete
 
     def parseXml(self, rootdir, packagexml, configxml):
         ''' parse the XML files
         try to create three dictionaries describing
         the way the data between the xml files is related '''
     
-        if _debug:
+        if self._debug:
             print("parsing: {0}".format(packagexml))
 
         typememberdict = {}
@@ -40,7 +43,7 @@ class FilesToIncludeInBuild():
             name = i.find("name").text
             members = [x.text for x in i.findall("members")]
 
-            if _debug:
+            if self._debug:
                 print("typememberdict[{0}] = {1}".format(name, members))
 
             typememberdict[name] = members
@@ -58,7 +61,7 @@ class FilesToIncludeInBuild():
                 typefilepathdict[name] = os.path.join(rootdir, folder)
                 typefileextdict[name] = extension
 
-                if _debug:
+                if self._debug:
                     print("Join paths: {0} + {1} = {2}"   \
                           .format(rootdir, folder, os.path.join(rootdir, folder)))
                     print("File extension for {0} is {1}" \
@@ -71,7 +74,7 @@ class FilesToIncludeInBuild():
                                                    , typefilepathdict)
 
 
-        if _debug:
+        if self._debug:
             print("typefilepathdict: {0}"       \
                   .format(typefilepathdict.items()))
             print("typefoldercontentsdict: {0}" \
@@ -98,7 +101,7 @@ class FilesToIncludeInBuild():
             try:
                 filepath = typefilepathdict[k]
                 if "*" not in filepath:
-                    if _debug:
+                    if self._debug:
                         print("filepath: {0}".format(filepath))
                         typefoldercontentsdict[k] = os.listdir(filepath)
             except KeyError as e:
@@ -133,15 +136,15 @@ class FilesToIncludeInBuild():
             if a != b then delete b from the filesystem '''
 
         for k, v in typefilepathdict.items():
-            if _debug:
+            if self._debug:
                 print("key: {0}, value: {1}".format(k, v))
 
             if k not in typememberdict.keys():
-                if _debug:
+                if self._debug:
                     print("Removing key: {0} as it was not in {1}".format(k, typememberdict.keys()))
 
                 # delete all files in the directory
-                if _delete:
+                if self._delete:
                     try:
                         if os.path.exists(typefilepathdict[k]):
                             shutil.rmtree(typefilepathdict[k])
@@ -159,7 +162,7 @@ class FilesToIncludeInBuild():
                     typefolderlist.sort()
                     typememberlist.sort()
 
-                    if _debug:
+                    if self._debug:
                         print('''typefolderlist: {0}
                                  \ntypememberlist: {1}
                                  \ntypemetalist: {2}''' \
@@ -179,7 +182,7 @@ class FilesToIncludeInBuild():
                                 print("deleting: {0}/{1}".format(typefilepathdict[k], i))
 
                                 # actually do the delete
-                                if _delete:
+                                if self._delete:
                                     os.remove("{0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
                                 sys.exit("typefilepathdict exception: {0}".format(e.args))
