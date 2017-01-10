@@ -7,7 +7,7 @@
 ##################################
 
 from lxml import etree
-import sys, os, re, argparse
+import sys, os, re, argparse, shutil
 
 _debug = False
 
@@ -121,22 +121,26 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
         then iterate through and compare each value
         if a != b then delete b from the filesystem '''
 
-    for k, v in typefoldercontentsdict.items():
+    for k, v in typefilepathdict.items():
         if _debug:
             print("key: {0}, value: {1}".format(k, v))
 
         if k not in typememberdict.keys():
             if _debug:
-                print("key: {0} not in {1}".format(k, typememberdict.keys()))
+                print("Removing key: {0} as it was not in {1}".format(k, typememberdict.keys()))
 
             # delete all files in the directory
-            pass 
+            if _delete:
+                try:
+                    shutil.rmtree(typefilepathdict[k])
+                except Exception  as e:
+                    print("Could not delete {0} the exception was: {1}".format(typefilepathdict[k], e.args))
         else:
             # if the members contain the element * 
             # then we want to keep everything dont we
             if "*" not in typememberdict[k]:
                 # otherwise sort the lists
-                typefolderlist = v                
+                typefolderlist = typefoldercontentsdict[k]                
                 typememberlist = [i + "." + typefileextdict[k] for i in typememberdict[k]]
                 typemetalist = [i + "-meta.xml" for i in typememberlist]
                 
@@ -163,7 +167,8 @@ def removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefi
                             print("deleting: {0}/{1}".format(typefilepathdict[k], i))
 
                             # actually do the delete
-                            os.remove(typefilepathdict[k], i)
+                            if _delete:
+                                os.remove("{0}/{1}".format(typefilepathdict[k], i))
                         except Exception as e:
                             sys.exit("typefilepathdict exception: {0}".format(e.args))
                             
@@ -174,8 +179,9 @@ def usage():
 
 def filesToIncludeInBuild(argv):
     ''' main function, get args and start doing stuff '''
-    global _debug
+    global _debug, _delete
     _debug = True
+    _delete = False
     packagexml = None
     configxml = None
     rootdir = None
@@ -192,12 +198,18 @@ def filesToIncludeInBuild(argv):
     parser.add_argument("-r"                                              
                         , "--root"                                        
                         , type=str                                        
-                        , help="the root directory")
+                        , help="the src directory")
     parser.add_argument("-d"                                              
                         , "--debug"
                         , dest="_debug"
                         , action="store_true"                             
                         , help="turn on debug mode, this is very verbose" 
+                        , default=True)
+    parser.add_argument("-x"                                              
+                        , "--execute"
+                        , dest="_delete"
+                        , action="store_true"                             
+                        , help="turn on delete mode, this will delete files" 
                         , default=True)
     args = parser.parse_args()
     
@@ -211,7 +223,9 @@ def filesToIncludeInBuild(argv):
     if not os.path.exists(args.root):
         sys.exit("the root folder doesnt exist")
 
-    parseXml(args.root, args.package, args.config)
+    parseXml(os.path.realpath(args.root)
+             , os.path.realpath(args.package)
+             , os.path.realpath(args.config))
 
         
 if __name__ == "__main__":
