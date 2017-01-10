@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<Package>
   <types>
     <folder>classes</folder>
     <extension>cls</extension>
@@ -119,3 +120,4 @@
     <extension>workflow</extension>
     <name>Workflow</name>
   </types>
+</Package>
