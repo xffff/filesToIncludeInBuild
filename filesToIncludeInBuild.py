@@ -34,8 +34,8 @@ class FilesToIncludeInBuild():
         typefileextdict = {}
         typefilepathdict = {}
 
-        packageroot = etree.XML(removeNamespaceReturnRoot(packagexml))
-        configroot = etree.XML(removeNamespaceReturnRoot(configxml))
+        packageroot = etree.XML(self.removeNamespaceReturnRoot(packagexml))
+        configroot = etree.XML(self.removeNamespaceReturnRoot(configxml))
     
         # create a dict of name->members
         for i in packageroot.iter("types"):
@@ -85,10 +85,10 @@ class FilesToIncludeInBuild():
                   .format(typefileextdict.items()))
 
         # delete the ones that do not match
-        removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefileextdict)
+        self.removeFiles(typefoldercontentsdict, typememberdict, typefilepathdict, typefileextdict)
 
         # move the package xml file
-        movePackageXml(rootdir, packagexml)
+        self.movePackageXml(rootdir, packagexml)
 
     def getFolderContents(self, typememberdict, typefilepathdict):
         ''' using the typememberdict keyset as a hook
