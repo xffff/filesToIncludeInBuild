@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
   <types>
+    <folder>applications</folder>
+    <extension>app</extension>
+    <name>CustomApplication</name>
+  </types>
+  <types>
     <folder>appMenus</folder>
     <extension>appMenu</extension>
     <name>AppMenu</name>
