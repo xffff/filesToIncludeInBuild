@@ -112,7 +112,7 @@
   </types>
   <types>
     <folder>permissionsets</folder>
-    <extension>permissionsset</extension>
+    <extension>permissionset</extension>
     <name>PermissionSet</name>
   </types>
   <types>
