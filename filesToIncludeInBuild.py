@@ -226,7 +226,7 @@ def filesToIncludeInBuild(argv):
                         , dest="_debug"
                         , action="store_true"                             
                         , help="turn on debug mode, this is very verbose" 
-                        , default=True)
+                        , default=False)
     parser.add_argument("-x"                                              
                         , "--execute"
                         , dest="_delete"
