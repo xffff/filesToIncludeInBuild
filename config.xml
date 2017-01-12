@@ -35,6 +35,11 @@
     <extension>dashboard</extension>
     <name>Dashboard</name>
   </types>
+    <types>
+    <folder>documents</folder>
+    <extension>xml</extension>
+    <name>Documents</name>
+  </types>
   <types>
     <folder>email</folder>
     <extension>email</extension>

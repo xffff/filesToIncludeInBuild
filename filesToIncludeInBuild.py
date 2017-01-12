@@ -175,7 +175,8 @@ class FilesToIncludeInBuild():
                                       , typememberlist
                                       , typemetalist))
 
-                    print("typefolderlist: {0}, typememberlist: {1}" \
+                    print('''typefolderlist: {0}
+                             \ntypememberlist: {1}''' \
                           .format(typefolderlist, typememberlist))
 
                     # if a file is not in the package xml but
