@@ -76,11 +76,6 @@
     <name>ApexTrigger</name>
   </types>
   <types>
-    <folder>applications</folder>
-    <extension>app</extension>
-    <name>ConnectedApp</name>
-  </types>
-  <types>
     <folder>labels</folder>
     <extension>label</extension>
     <name>CustomLabels</name>
