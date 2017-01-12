@@ -175,10 +175,6 @@ class FilesToIncludeInBuild():
                                       , typememberlist
                                       , typemetalist))
 
-                    print('''typefolderlist: {0}
-                             \ntypememberlist: {1}''' \
-                          .format(typefolderlist, typememberlist))
-
                     # if a file is not in the package xml but
                     # is in the filesystem, it should be deleted
                     # so it does not appear in the build
