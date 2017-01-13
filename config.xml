@@ -56,6 +56,11 @@
     <name>EscalationRule</name>
   </types>
   <types>
+    <folder>flows</folder>
+    <extension>flow</extension>
+    <name>Flow</name>
+  </types>
+  <types>
     <folder>reports</folder>
     <extension>report</extension>
     <name>Report</name>
@@ -74,6 +79,11 @@
     <folder>triggers</folder>
     <extension>trigger</extension>
     <name>ApexTrigger</name>
+  </types>
+  <types>
+    <folder>connectedapps</folder>
+    <extension>app</extension>
+    <name>ConnectedApp</name>
   </types>
   <types>
     <folder>labels</folder>
