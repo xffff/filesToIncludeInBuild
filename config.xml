@@ -42,8 +42,8 @@
   </types>
     <types>
     <folder>documents</folder>
-    <extension>xml</extension>
-    <name>Documents</name>
+    <extension></extension>
+    <name>Document</name>
   </types>
   <types>
     <folder>email</folder>
