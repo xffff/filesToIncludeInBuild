@@ -160,8 +160,7 @@ class FilesToIncludeInBuild():
                 # then we want to keep everything dont we
                 if "*" not in typememberdict[k]:
                     # otherwise sort the lists
-                    typefolderlist = typefoldercontentsdict[k]                
-                    typemetalist = [i + "-meta.xml" for i in typememberlist]
+                    typefolderlist = typefoldercontentsdict[k]
 
                     # typememberlist = [i + "." + typefileextdict[k] for i in typememberdict[k]]
 
@@ -170,7 +169,9 @@ class FilesToIncludeInBuild():
                             typememberlist.append(i + "." + typefileextdict[k])
                         else:
                             typememberlist.append(i)
-                    
+
+                    typemetalist = [i + "-meta.xml" for i in typememberlist]
+
                     typefolderlist.sort()
                     typememberlist.sort()
 
