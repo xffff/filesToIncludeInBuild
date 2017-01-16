@@ -163,7 +163,7 @@ class FilesToIncludeInBuild():
                     typefolderlist = typefoldercontentsdict[k]
 
                     # typememberlist = [i + "." + typefileextdict[k] for i in typememberdict[k]]
-
+                    typememberlist = []
                     for i in typememberdict[k]:
                         if typefileextdict[k] != None:
                             typememberlist.append(i + "." + typefileextdict[k])
