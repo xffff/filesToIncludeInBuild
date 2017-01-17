@@ -195,8 +195,11 @@ class FilesToIncludeInBuild():
 
                                     try:
                                         os.remove("{0}/{1}".format(typefilepathdict[k], i))
-                                    except IsADirectoryError as e:
+                                    except OSError as e:
+                                        if e.errno != e.EISDIR:
+                                            raise e
                                         shutil.rmtree("{0}/{1}".format(typefilepathdict[k], i))
+                                            
                                 else:
                                     print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
