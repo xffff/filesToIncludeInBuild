@@ -192,7 +192,11 @@ class FilesToIncludeInBuild():
                                 # actually do the delete
                                 if self._delete:
                                     print("deleting: {0}/{1}".format(typefilepathdict[k], i))
-                                    os.remove("{0}/{1}".format(typefilepathdict[k], i))
+
+                                    try:
+                                        os.remove("{0}/{1}".format(typefilepathdict[k], i))
+                                    except IsADirectoryError as e:
+                                        shutil.rmtree("{0}/{1}".format(typefilepathdict[k], i))
                                 else:
                                     print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
