@@ -189,20 +189,23 @@ class FilesToIncludeInBuild():
                     # so it does not appear in the build
                     for i in typefolderlist:
                         if i not in typememberlist and i not in typemetalist:
+                            fileToDelete = "{0}/{1}".format(typefilepathdict[k], i)
                             try:
                                 # actually do the delete
                                 if self._delete:
                                     try:
-                                        os.remove("{0}/{1}".format(typefilepathdict[k], i))
-                                        print("deleted: {0}/{1}".format(typefilepathdict[k], i))
+                                        os.remove(fileToDelete)
+                                        print("deleted: {0}".format(fileToDelete))
                                     except OSError as e:
                                         if e.errno == 21:
-                                            shutil.rmtree("{0}".format(typefilepathdict[k]))
-                                            print("deleted directory: {0}/{1}".format(typefilepathdict[k], i))
+                                            shutil.rmtree(fileToDelete)
+                                            print("deleted directory: {0}".format(fileToDelete))
                                         else:
-                                            print("error deleting: {0}/{1}\n{2}, {3}".format(typefilepathdict[k], i, type(e), e.args))
+                                            print("error deleting: {0}\n{1}, {2}".format(fileToDelete
+                                                                                         , type(e)
+                                                                                         , e.args))
                                 else:
-                                    print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
+                                    print("Execute disabled: I would delete: {0}".format(fileToDelete)
                             except Exception as e:
                                 sys.exit("typefilepathdict exception: {0} {1}".format(type(e), e.args))
                             
