@@ -195,15 +195,13 @@ class FilesToIncludeInBuild():
 
                                     try:
                                         os.remove("{0}/{1}".format(typefilepathdict[k], i))
-                                    except OSError as e:
-                                        if e.errno != e.EISDIR:
-                                            raise e
+                                    except IsADirectoryError:
                                         shutil.rmtree("{0}/{1}".format(typefilepathdict[k], i))
                                             
                                 else:
                                     print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
-                                sys.exit("typefilepathdict exception: {0}".format(e.args))
+                                sys.exit("typefilepathdict exception: {0} {1}".format(type(e), e.args))
                             
 
     def movePackageXml(self, rootdir, packagexml):
