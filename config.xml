@@ -163,16 +163,6 @@
   <types>
     <folder>sharingRules</folder>
     <extension>sharingRules</extension>
-    <name>SharingCriteriaRule</name>
-  </types>
-  <types>
-    <folder>sharingRules</folder>
-    <extension>sharingRules</extension>
-    <name>SharingOwnerRule</name>
-  </types>
-  <types>
-    <folder>sharingRules</folder>
-    <extension>sharingRules</extension>
-    <name>SharingTerritoryRule</name>
+    <name>SharingRules</name>
   </types>
 </Package>
