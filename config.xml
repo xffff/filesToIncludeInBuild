@@ -160,4 +160,19 @@
     <extension>workflow</extension>
     <name>Workflow</name>
   </types>
+  <types>
+    <folder>sharingRules</folder>
+    <extension>sharingRules</extension>
+    <name>SharingCriteriaRule</name>
+  </types>
+  <types>
+    <folder>sharingRules</folder>
+    <extension>sharingRules</extension>
+    <name>SharingOwnerRule</name>
+  </types>
+  <types>
+    <folder>sharingRules</folder>
+    <extension>sharingRules</extension>
+    <name>SharingTerritoryRule</name>
+  </types>
 </Package>
