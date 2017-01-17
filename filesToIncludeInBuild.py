@@ -200,7 +200,7 @@ class FilesToIncludeInBuild():
                                             shutil.rmtree("{0}".format(typefilepathdict[k]))
                                             print("deleted directory: {0}/{1}".format(typefilepathdict[k], i))
                                         else:
-                                            print("error deleting: {0}/{1}\n{2}, {3}".format(typefilepathdict[k], i, type(e), e.args())
+                                            print("error deleting: {0}/{1}\n{2}, {3}".format(typefilepathdict[k], i, type(e), e.args))
                                 else:
                                     print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
