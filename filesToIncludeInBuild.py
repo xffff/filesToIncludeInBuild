@@ -149,7 +149,7 @@ class FilesToIncludeInBuild():
                 if self._delete:
                     try:
                         if os.path.exists(typefilepathdict[k]):
-                            print("Deleting: {0}".format(typefilepathdict[k]))
+                            print("Deleting directory: {0}".format(typefilepathdict[k]))
                             shutil.rmtree(typefilepathdict[k])
                     except Exception  as e:
                         print("Could not delete {0} the exception was: {1}".format(typefilepathdict[k], e.args))
@@ -191,14 +191,13 @@ class FilesToIncludeInBuild():
                             try:
                                 # actually do the delete
                                 if self._delete:
-                                    print("deleting: {0}/{1}".format(typefilepathdict[k], i))
-
                                     try:
                                         os.remove("{0}/{1}".format(typefilepathdict[k], i))
+                                        print("deleted: {0}/{1}".format(typefilepathdict[k], i))
                                     except OSError as e:
                                         if e.errno == 21:
                                             shutil.rmtree("{0}".format(typefilepathdict[k]))
-                                            
+                                            print("deleted directory: {0}/{1}".format(typefilepathdict[k], i))
                                 else:
                                     print("Execute disabled: I would delete: {0}/{1}".format(typefilepathdict[k], i))
                             except Exception as e:
