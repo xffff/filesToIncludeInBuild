@@ -165,10 +165,10 @@ class FilesToIncludeInBuild():
                     # typememberlist = [i + "." + typefileextdict[k] for i in typememberdict[k]]
                     typememberlist = []
                     for i in typememberdict[k]:
-                        if typefileextdict[k] != None:
-                            typememberlist.append(i + "." + typefileextdict[k])
-                        else:
+                        if typefileextdict[k] == None or os.path.isdir("{0}/{1}".format(typefilepathdict[k], i)):
                             typememberlist.append(i)
+                        else:
+                            typememberlist.append(i + "." + typefileextdict[k])
 
                     typemetalist = [i + "-meta.xml" for i in typememberlist]
 
