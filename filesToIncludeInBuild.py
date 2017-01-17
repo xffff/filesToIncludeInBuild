@@ -205,7 +205,7 @@ class FilesToIncludeInBuild():
                                                                                          , type(e)
                                                                                          , e.args))
                                 else:
-                                    print("Execute disabled: I would delete: {0}".format(fileToDelete)
+                                    print("Execute disabled: I would delete: {0}".format(fileToDelete))
                             except Exception as e:
                                 sys.exit("typefilepathdict exception: {0} {1}".format(type(e), e.args))
                             
