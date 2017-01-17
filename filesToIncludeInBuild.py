@@ -139,7 +139,8 @@ class FilesToIncludeInBuild():
 
         for k, v in typefilepathdict.items():
             if self._debug:
-                print("\nkey: {0}, value: {1}".format(k, v))
+                print("\n********************************************************************")
+                print("key: {0}, value: {1}".format(k, v))
 
             if k not in typememberdict.keys():
                 if self._debug:
