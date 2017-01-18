@@ -36,6 +36,11 @@
     <name>Community</name>
   </types>  
   <types>
+    <folder>contentassets</folder>
+    <extension>asset</extension>
+    <name>ContentAsset</name>
+  </types>  
+  <types>
     <folder>dashboards</folder>
     <extension>dashboard</extension>
     <name>Dashboard</name>
