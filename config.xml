@@ -170,4 +170,9 @@
     <extension>sharingRules</extension>
     <name>SharingRules</name>
   </types>
+  <types>
+    <folder>standardValueSets</folder>
+    <extension>standardValueSet</extension>
+    <name>StandardValueSet</name>
+  </types>
 </Package>
