@@ -66,6 +66,11 @@
     <name>Flow</name>
   </types>
   <types>
+    <folder>letterhead</folder>
+    <extension>letter</extension>
+    <name>Letterhead</name>
+  </types>
+  <types>
     <folder>reports</folder>
     <extension>report</extension>
     <name>Report</name>
