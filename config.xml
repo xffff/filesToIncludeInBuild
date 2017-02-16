@@ -131,6 +131,11 @@
     <name>Layout</name>
   </types>
   <types>
+    <folder>pathAssistants</folder>
+    <extension>pathAssistant</extension>
+    <name>PathAssistant</name>
+  </types>
+  <types>
     <folder>permissionsets</folder>
     <extension>permissionset</extension>
     <name>PermissionSet</name>
