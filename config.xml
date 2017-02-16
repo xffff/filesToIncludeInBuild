@@ -36,6 +36,11 @@
     <name>Community</name>
   </types>  
   <types>
+    <folder>contentassets</folder>
+    <extension>asset</extension>
+    <name>ContentAsset</name>
+  </types>  
+  <types>
     <folder>dashboards</folder>
     <extension>dashboard</extension>
     <name>Dashboard</name>
@@ -59,6 +64,11 @@
     <folder>flows</folder>
     <extension>flow</extension>
     <name>Flow</name>
+  </types>
+  <types>
+    <folder>letterhead</folder>
+    <extension>letter</extension>
+    <name>Letterhead</name>
   </types>
   <types>
     <folder>reports</folder>
@@ -121,6 +131,11 @@
     <name>Layout</name>
   </types>
   <types>
+    <folder>pathAssistants</folder>
+    <extension>pathAssistant</extension>
+    <name>PathAssistant</name>
+  </types>
+  <types>
     <folder>permissionsets</folder>
     <extension>permissionset</extension>
     <name>PermissionSet</name>
@@ -164,5 +179,10 @@
     <folder>sharingRules</folder>
     <extension>sharingRules</extension>
     <name>SharingRules</name>
+  </types>
+  <types>
+    <folder>standardValueSets</folder>
+    <extension>standardValueSet</extension>
+    <name>StandardValueSet</name>
   </types>
 </Package>
