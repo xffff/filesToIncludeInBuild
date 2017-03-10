@@ -36,6 +36,11 @@
     <name>Community</name>
   </types>  
   <types>
+    <folder>customPermissions</folder>
+    <extension>customPermission</extension>
+    <name>CustomPermission</name>
+  </types>  
+  <types>
     <folder>contentassets</folder>
     <extension>asset</extension>
     <name>ContentAsset</name>
