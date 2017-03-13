@@ -29,7 +29,12 @@
     <folder>autoResponseRules</folder>
     <extension>autoResponseRule</extension>
     <name>AutoResponseRules</name>
-  </types>  
+  </types>
+  <types>
+    <folder>aura</folder>
+    <extension></extension>
+    <name>AuraDefinitionBundle</name>
+  </types>
   <types>
     <folder>communities</folder>
     <extension>community</extension>
