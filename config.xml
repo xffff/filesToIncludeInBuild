@@ -195,4 +195,19 @@
     <extension>standardValueSet</extension>
     <name>StandardValueSet</name>
   </types>
+  <types>
+    <folder>transactionSecurityPolicies</folder>
+    <extension>transactionSecurityPolicy</extension>
+    <name>TransactionSecurityPolicy</name>
+  </types>
+  <types>
+    <folder>matchingRules</folder>
+    <extension>matchingRule</extension>
+    <name>MatchingRule</name>
+  </types>  
+  <types>
+    <folder>duplicateRules</folder>
+    <extension>duplicateRule</extension>
+    <name>DuplicateRule</name>
+  </types>  
 </Package>
