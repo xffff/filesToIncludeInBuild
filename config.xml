@@ -210,4 +210,9 @@
     <extension>duplicateRule</extension>
     <name>DuplicateRule</name>
   </types>  
+  <types>
+    <folder>sites</folder>
+    <extension>site</extension>
+    <name>CustomSite</name>
+  </types>  
 </Package>
